@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Áreas · Instagram Mar–Jun 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root {
+  --bg: #0f0f11;
+  --bg2: #17171a;
+  --bg3: #1e1e23;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #f0f0f2;
+  --text2: #8a8a96;
+  --text3: #5a5a66;
+  --accent: #a78bfa;
+  --accent2: #7c3aed;
+  --green: #34d399;
+  --amber: #fbbf24;
+  --blue: #60a5fa;
+  --red: #f87171;
+  --reel: #a78bfa;
+  --carrusel: #34d399;
+  --imagen: #60a5fa;
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* Header */
+.header { padding: 32px 32px 0; border-bottom: 1px solid var(--border); }
+.header-inner { max-width: 1200px; margin: 0 auto; }
+.logo-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+.logo { display: flex; align-items: center; gap: 12px; }
+.logo-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent2); }
+.logo-text { font-size: 15px; font-weight: 500; color: var(--text); letter-spacing: -0.01em; }
+.logo-sub { font-size: 12px; color: var(--text2); margin-top: 1px; }
+.period-badge { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text3); background: var(--bg3); border: 1px solid var(--border); padding: 4px 10px; border-radius: 20px; }
+
+/* Nav tabs */
+.nav { display: flex; gap: 0; }
+.nav-tab { padding: 10px 18px; font-size: 13px; font-weight: 400; color: var(--text2); background: none; border: none; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color .15s, border-color .15s; }
+.nav-tab:hover { color: var(--text); }
+.nav-tab.on { color: var(--text); border-bottom-color: var(--accent); font-weight: 500; }
+
+/* Main layout */
+.main { max-width: 1200px; margin: 0 auto; padding: 28px 32px 60px; }
+
+/* Filters */
+.filters { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 24px; }
+.filters label { font-size: 12px; color: var(--text2); }
+select {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px; color: var(--text);
+  background: var(--bg3); border: 1px solid var(--border2);
+  padding: 7px 12px; border-radius: var(--radius-sm); cursor: pointer;
+  outline: none; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238a8a96'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px;
+}
+select:focus { border-color: var(--accent); }
+
+/* Metric grid */
+.mgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 28px; }
+.mc { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; }
+.mc .lbl { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+.mc .val { font-size: 26px; font-weight: 600; color: var(--text); letter-spacing: -0.02em; line-height: 1; }
+.mc .sub { font-size: 11px; color: var(--text3); margin-top: 6px; }
+.mc.accent { border-color: rgba(167,139,250,.25); background: rgba(167,139,250,.05); }
+.mc.accent .val { color: var(--accent); }
+
+/* Table */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th { text-align: left; font-size: 11px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: .05em; padding: 10px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+tbody td { padding: 12px 12px; border-bottom: 1px solid var(--border); color: var(--text2); vertical-align: middle; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 0; }
+tbody tr:hover td { background: var(--bg2); color: var(--text); }
+td.desc { color: var(--text); max-width: 280px; }
+.badge { display: inline-block; font-size: 10px; font-weight: 500; padding: 3px 8px; border-radius: 20px; }
+.badge-reel { background: rgba(167,139,250,.15); color: var(--reel); border: 1px solid rgba(167,139,250,.25); }
+.badge-carrusel { background: rgba(52,211,153,.12); color: var(--carrusel); border: 1px solid rgba(52,211,153,.2); }
+.badge-imagen { background: rgba(96,165,250,.12); color: var(--imagen); border: 1px solid rgba(96,165,250,.2); }
+.star { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 600; color: var(--amber); background: rgba(251,191,36,.1); border: 1px solid rgba(251,191,36,.2); padding: 2px 8px; border-radius: 20px; }
+.bar-bg { display: inline-block; width: 60px; height: 4px; background: var(--bg3); border-radius: 2px; vertical-align: middle; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 2px; }
+a.ig-link { color: var(--text3); text-decoration: none; font-size: 11px; }
+a.ig-link:hover { color: var(--accent); }
+
+/* Charts */
+.charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.chart-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+.chart-card.full { grid-column: 1 / -1; }
+.chart-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+.chart-sub { font-size: 11px; color: var(--text3); margin-bottom: 16px; }
+.cw { position: relative; width: 100%; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 12px; }
+.legend span { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text2); }
+.ldot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+
+/* Insights */
+.insights-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.insight-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+.insight-card.full { grid-column: 1 / -1; }
+.insight-card h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .07em; color: var(--text3); margin-bottom: 12px; }
+.insight-item { padding: 12px 0; border-bottom: 1px solid var(--border); }
+.insight-item:last-child { border-bottom: none; }
+.insight-item .rank { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text3); margin-right: 8px; }
+.insight-item .title { font-size: 13px; color: var(--text); line-height: 1.4; }
+.insight-item .meta { font-size: 11px; color: var(--text3); margin-top: 4px; }
+.insight-item .metric { font-size: 13px; font-weight: 600; color: var(--accent); }
+.rec-box { background: linear-gradient(135deg, rgba(167,139,250,.08) 0%, rgba(96,165,250,.05) 100%); border: 1px solid rgba(167,139,250,.2); border-radius: var(--radius); padding: 20px; }
+.rec-box h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .07em; color: var(--accent); margin-bottom: 14px; }
+.rec-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 10px; font-size: 13px; color: var(--text2); line-height: 1.5; }
+.rec-row strong { color: var(--text); }
+.rec-icon { flex-shrink: 0; font-size: 14px; margin-top: 1px; }
+
+/* Responsive */
+@media (max-width: 700px) {
+  .header, .main { padding-left: 16px; padding-right: 16px; }
+  .charts-grid, .insights-grid { grid-template-columns: 1fr; }
+  .chart-card.full { grid-column: auto; }
+  .mgrid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="logo-row">
+      <div class="logo">
+        <div class="logo-dot"></div>
+        <div>
+          <div class="logo-text">Áreas · Dashboard Instagram</div>
+          <div class="logo-sub">47 publicaciones analizadas</div>
+        </div>
+      </div>
+      <span class="period-badge">Mar → Jun 2026</span>
+    </div>
+    <div class="nav">
+      <button class="nav-tab on" onclick="switchTab('top',this)">Top posts</button>
+      <button class="nav-tab" onclick="switchTab('charts',this)">Gráficos</button>
+      <button class="nav-tab" onclick="switchTab('insights',this)">Insights junio</button>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="filters">
+    <label>Formato:</label>
+    <select id="fTipo" onchange="render()">
+      <option value="all">Todos los formatos</option>
+      <option value="Reel de Instagram">Reels</option>
+      <option value="Secuencia de Instagram">Carrusel</option>
+      <option value="Imagen de Instagram">Imagen</option>
+    </select>
+    <label>Ordenar por:</label>
+    <select id="fMetric" onchange="render()">
+      <option value="alcance">Alcance</option>
+      <option value="eng_rate">Engagement rate</option>
+      <option value="likes">Likes</option>
+      <option value="guardados">Guardados</option>
+      <option value="compartidos">Compartidos</option>
+      <option value="comentarios">Comentarios</option>
+    </select>
+  </div>
+
+  <div class="mgrid" id="mg"></div>
+
+  <!-- TAB: TOP POSTS -->
+  <div id="tab-top">
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th style="width:32%">Descripción</th>
+          <th>Formato</th>
+          <th>Fecha</th>
+          <th>Alcance</th>
+          <th>Likes</th>
+          <th>Guard.</th>
+          <th>Eng%</th>
+          <th></th>
+          <th>Link</th>
+        </tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB: CHARTS -->
+  <div id="tab-charts" style="display:none">
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">Alcance medio por formato</div>
+        <div class="chart-sub">Media de personas alcanzadas por publicación</div>
+        <div class="legend" id="leg1"></div>
+        <div class="cw" style="height:200px"><canvas id="c1"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Engagement rate por formato</div>
+        <div class="chart-sub">Media del ratio (likes+cm+sh+sv) / alcance</div>
+        <div class="legend" id="leg2"></div>
+        <div class="cw" style="height:200px"><canvas id="c2"></canvas></div>
+      </div>
+      <div class="chart-card full">
+        <div class="chart-title">Top 10 posts por alcance</div>
+        <div class="chart-sub">Publicaciones con mayor distribución orgánica</div>
+        <div class="cw" style="height:380px"><canvas id="c3"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: INSIGHTS -->
+  <div id="tab-insights" style="display:none">
+    <div class="insights-grid" id="insights-content"></div>
+  </div>
+</div>
+
+<script>
+const RAW = [{"desc":"♻️🤝 Congreso de Desarrollo Sostenible @aecoctalento_es","tipo":"Secuencia de Instagram","fecha":"03/05/26","alcance":1110,"likes":25,"comentarios":0,"compartidos":0,"guardados":0,"eng_rate":2.25,"url":"https://www.instagram.com/p/DViNjUoCG08/"},{"desc":"La cultura de un país también se vive en los aeropuertos ✈️ @portfoliostore","tipo":"Secuencia de Instagram","fecha":"03/05/26","alcance":1493,"likes":53,"comentarios":0,"compartidos":2,"guardados":2,"eng_rate":3.82,"url":"https://www.instagram.com/p/DViOpGgiE8L/"},{"desc":"🔥 Últimos momentos antes de la gran final de #GrandChefAuto","tipo":"Secuencia de Instagram","fecha":"03/07/26","alcance":1833,"likes":86,"comentarios":1,"compartidos":11,"guardados":1,"eng_rate":5.4,"url":"https://www.instagram.com/p/DVmDj1kjKvO/"},{"desc":"Hay algo que cambia todo cuando viajas: la comida hecha al momento 🍽️","tipo":"Reel de Instagram","fecha":"03/08/26","alcance":7144,"likes":84,"comentarios":0,"compartidos":2,"guardados":4,"eng_rate":1.26,"url":"https://www.instagram.com/reel/DVo6dLpDE7N/"},{"desc":"☕✨ Final 2º Concurso Baristas Portugal — café como arte","tipo":"Reel de Instagram","fecha":"03/11/26","alcance":1870,"likes":72,"comentarios":2,"compartidos":13,"guardados":1,"eng_rate":4.71,"url":"https://www.instagram.com/reel/DVvqfc2DPTI/"},{"desc":"🔥🍽️ Tapa ganadora — final #GrandChefAuto","tipo":"Secuencia de Instagram","fecha":"","alcance":1110,"likes":45,"comentarios":0,"compartidos":4,"guardados":2,"eng_rate":4.59,"url":"https://www.instagram.com/p/DV3H-GuiKnR/"},{"desc":"🥪✈️ Bocadillo ganador — final #GrandChefAirport","tipo":"Secuencia de Instagram","fecha":"","alcance":1470,"likes":92,"comentarios":0,"compartidos":5,"guardados":3,"eng_rate":6.8,"url":"https://www.instagram.com/p/DV3ImHUiNox/"},{"desc":"A veces, lo único que necesitas en el viaje… es una pausa ✨","tipo":"Reel de Instagram","fecha":"","alcance":5606,"likes":70,"comentarios":1,"compartidos":0,"guardados":7,"eng_rate":1.39,"url":"https://www.instagram.com/reel/DV6uN-Vs-fX/"},{"desc":"✈️ Reabrimos Burger King en el Aeropuerto de Sevilla","tipo":"Secuencia de Instagram","fecha":"","alcance":1961,"likes":82,"comentarios":3,"compartidos":12,"guardados":0,"eng_rate":4.95,"url":"https://www.instagram.com/p/DWJBSUqjmIi/"},{"desc":"Domingo por la mañana. El aeropuerto todavía en silencio ✈️ ☕","tipo":"Secuencia de Instagram","fecha":"","alcance":843,"likes":35,"comentarios":0,"compartidos":3,"guardados":3,"eng_rate":4.86,"url":"https://www.instagram.com/p/DWLkSGKiHaK/"},{"desc":"Empieza la primavera. Las ganas de comer de otra manera.","tipo":"Reel de Instagram","fecha":"","alcance":8758,"likes":60,"comentarios":1,"compartidos":1,"guardados":5,"eng_rate":0.77,"url":"https://www.instagram.com/reel/DWM3PSTslv_/"},{"desc":"Hemos estado en @alimentariabcn y @hostelcobcn","tipo":"Secuencia de Instagram","fecha":"","alcance":844,"likes":40,"comentarios":0,"compartidos":1,"guardados":0,"eng_rate":4.86,"url":"https://www.instagram.com/p/DWT8PdEiNPf/"},{"desc":"La carretera del norte en primavera tiene algo especial 🛣️🌿","tipo":"Secuencia de Instagram","fecha":"","alcance":8696,"likes":64,"comentarios":0,"compartidos":0,"guardados":5,"eng_rate":0.79,"url":"https://www.instagram.com/p/DWUYLjWAgaq/"},{"desc":"Hay domingos que empiezan diferente… maleta en la puerta","tipo":"Reel de Instagram","fecha":"","alcance":2093,"likes":41,"comentarios":0,"compartidos":3,"guardados":1,"eng_rate":2.15,"url":"https://www.instagram.com/reel/DWePppLsX0z/"},{"desc":"Jamón ibérico cortado al momento. Rincones gourmet del aeropuerto 😏","tipo":"Reel de Instagram","fecha":"","alcance":8523,"likes":298,"comentarios":1,"compartidos":0,"guardados":8,"eng_rate":3.6,"url":"https://www.instagram.com/reel/DWhT8LVsDYM/"},{"desc":"✈️🍴 Nueva parada en Aeropuerto Madrid-Barajas","tipo":"Secuencia de Instagram","fecha":"","alcance":1522,"likes":67,"comentarios":1,"compartidos":12,"guardados":1,"eng_rate":5.32,"url":"https://www.instagram.com/p/DWjNSP7DFEe/"},{"desc":"Día Mundial de la Salud — también cuenta cuando estás de viaje ✈️","tipo":"Secuencia de Instagram","fecha":"04/07/26","alcance":576,"likes":22,"comentarios":2,"compartidos":0,"guardados":1,"eng_rate":4.34,"url":"https://www.instagram.com/p/DW0xuFiiLoQ/"},{"desc":"El tren sale en diez minutos. El café ya está listo ☕","tipo":"Reel de Instagram","fecha":"04/08/26","alcance":696,"likes":25,"comentarios":0,"compartidos":2,"guardados":0,"eng_rate":3.88,"url":"https://www.instagram.com/reel/DW4IJJNMS43/"},{"desc":"Aeropuerto de Fuerteventura — Terrace Bar merece la pena ✈️","tipo":"Secuencia de Instagram","fecha":"04/10/26","alcance":1011,"likes":49,"comentarios":0,"compartidos":0,"guardados":1,"eng_rate":4.95,"url":"https://www.instagram.com/p/DW8wwLTiN2M/"},{"desc":"Bocadillo de lomo ibérico. Pan crujiente, sabor que se queda.","tipo":"Secuencia de Instagram","fecha":"04/12/26","alcance":6867,"likes":58,"comentarios":1,"compartidos":1,"guardados":8,"eng_rate":0.99,"url":"https://www.instagram.com/p/DXCuIewCPvg/"},{"desc":"Área de Servicio La Selva — buscamos personas con actitud","tipo":"Imagen de Instagram","fecha":"","alcance":9918,"likes":40,"comentarios":0,"compartidos":5,"guardados":6,"eng_rate":0.51,"url":"https://www.instagram.com/p/DXOfgLWiIkG/"},{"desc":"Lugares que no esperas en un aeropuerto. Producto local, gourmet.","tipo":"Secuencia de Instagram","fecha":"","alcance":649,"likes":27,"comentarios":0,"compartidos":0,"guardados":1,"eng_rate":4.31,"url":"https://www.instagram.com/p/DXT7r11iLkD/"},{"desc":"Sevilla ya huele a feria 🌸 Para llegar con fuerzas hay que empezar bien","tipo":"Secuencia de Instagram","fecha":"","alcance":789,"likes":22,"comentarios":0,"compartidos":0,"guardados":0,"eng_rate":2.79,"url":"https://www.instagram.com/p/DXWw-amDKSZ/"},{"desc":"Es comida recién hecha. Es café premium. Es ese momento que te das.","tipo":"Reel de Instagram","fecha":"","alcance":6020,"likes":114,"comentarios":1,"compartidos":2,"guardados":1,"eng_rate":1.96,"url":"https://www.instagram.com/reel/DXWyb6YDPGn/"},{"desc":"Lydia estaba teniendo un mal día. El servicio a tope. Pero entonces…","tipo":"Imagen de Instagram","fecha":"","alcance":1001,"likes":27,"comentarios":4,"compartidos":11,"guardados":3,"eng_rate":4.5,"url":"https://www.instagram.com/p/DXe1eiNEZ63/"},{"desc":"Sant Jordi — 'Historias que unen' 📖 Un libro te espera","tipo":"Secuencia de Instagram","fecha":"","alcance":1143,"likes":98,"comentarios":6,"compartidos":1,"guardados":1,"eng_rate":9.27,"url":"https://www.instagram.com/p/DXfAaDlDFyB/"},{"desc":"Carlos, Supervisor de tesorería. Cuando una empresa confía en ti…","tipo":"Reel de Instagram","fecha":"","alcance":1136,"likes":35,"comentarios":1,"compartidos":4,"guardados":1,"eng_rate":3.61,"url":"https://www.instagram.com/reel/DXq2_dcszhd/"},{"desc":"¿Buscas trabajo en hostelería con condiciones reales? Ayudantes de Cocina","tipo":"Imagen de Instagram","fecha":"","alcance":5825,"likes":31,"comentarios":0,"compartidos":6,"guardados":2,"eng_rate":0.67,"url":"https://www.instagram.com/p/DXtoBm4CDHC/"},{"desc":"María Soledad: entró a cubrir vacaciones. Diez años después, sigue.","tipo":"Imagen de Instagram","fecha":"","alcance":1275,"likes":41,"comentarios":0,"compartidos":0,"guardados":3,"eng_rate":3.45,"url":"https://www.instagram.com/p/DXwwLJTDD3s/"},{"desc":"Hay viajes que empiezan en la mesa. Taberna La Ancha.","tipo":"Reel de Instagram","fecha":"05/06/26","alcance":959,"likes":27,"comentarios":1,"compartidos":0,"guardados":1,"eng_rate":3.02,"url":"https://www.instagram.com/reel/DYAGvIFMhwD/"},{"desc":"150 vacantes en las Islas Baleares ✈️☀️ Camarero/a o cocinero/a","tipo":"Imagen de Instagram","fecha":"05/07/26","alcance":9247,"likes":54,"comentarios":6,"compartidos":19,"guardados":6,"eng_rate":0.92,"url":"https://www.instagram.com/p/DYCU-llCJns/"},{"desc":"Faro olía a @costacoffee ☕✈️ Nueva oferta gastronómica","tipo":"Secuencia de Instagram","fecha":"05/08/26","alcance":1322,"likes":74,"comentarios":0,"compartidos":9,"guardados":3,"eng_rate":6.51,"url":"https://www.instagram.com/p/DYE8p7AiF5N/"},{"desc":"Cruje primero. Piensas después. Milanesa, pan tostado y queso fundido.","tipo":"Reel de Instagram","fecha":"05/10/26","alcance":5777,"likes":80,"comentarios":2,"compartidos":2,"guardados":9,"eng_rate":1.61,"url":"https://www.instagram.com/reel/DYJ815oskZl/"},{"desc":"Javier llegó a Areas hace 14 años desde una empresa pequeña.","tipo":"Imagen de Instagram","fecha":"05/10/26","alcance":1131,"likes":24,"comentarios":1,"compartidos":0,"guardados":4,"eng_rate":2.56,"url":"https://www.instagram.com/p/DYK5kxMDOu0/"},{"desc":"Tortitas japonesas, huevos Benedict y café antes de volar 🍳☕✈️","tipo":"Reel de Instagram","fecha":"05/12/26","alcance":920,"likes":29,"comentarios":5,"compartidos":1,"guardados":0,"eng_rate":3.8,"url":"https://www.instagram.com/reel/DYPeg6ism8J/"},{"desc":"Escala de dos horas. Una copa de Rioja. Jamón cortado al momento.","tipo":"Secuencia de Instagram","fecha":"","alcance":723,"likes":18,"comentarios":1,"compartidos":0,"guardados":0,"eng_rate":2.63,"url":"https://www.instagram.com/p/DYSOaljgWOO/"},{"desc":"Jennifer: conciliar, cobrar a tiempo y que se cumpla lo pactado.","tipo":"Reel de Instagram","fecha":"","alcance":8755,"likes":139,"comentarios":6,"compartidos":21,"guardados":37,"eng_rate":2.32,"url":"https://www.instagram.com/reel/DYXH2GNCSDF/"},{"desc":"Feria de Empleo Universidad de Burgos","tipo":"Secuencia de Instagram","fecha":"","alcance":1216,"likes":28,"comentarios":0,"compartidos":1,"guardados":6,"eng_rate":2.88,"url":"https://www.instagram.com/p/DYaIahiDNuW/"},{"desc":"Ese momento incómodo en el que muerdes la milanesa… 😅 Chalit","tipo":"Secuencia de Instagram","fecha":"","alcance":775,"likes":21,"comentarios":0,"compartidos":0,"guardados":0,"eng_rate":2.71,"url":"https://www.instagram.com/p/DYnMDufDFTV/"},{"desc":"Ayer vivimos una jornada diferente. Una de esas que te hacen parar.","tipo":"Secuencia de Instagram","fecha":"","alcance":872,"likes":34,"comentarios":0,"compartidos":0,"guardados":3,"eng_rate":4.24,"url":"https://www.instagram.com/p/DYop-DtjK39/"},{"desc":"El verano se acerca. Buscamos Ayudantes de Cocina y Camareros.","tipo":"Imagen de Instagram","fecha":"","alcance":792,"likes":9,"comentarios":0,"compartidos":1,"guardados":2,"eng_rate":1.52,"url":"https://www.instagram.com/p/DYuavjXM4gq/"},{"desc":"La Generación del Veintisiete y una caña. Lo encuentras aquí.","tipo":"Secuencia de Instagram","fecha":"","alcance":656,"likes":13,"comentarios":0,"compartidos":0,"guardados":0,"eng_rate":1.98,"url":"https://www.instagram.com/p/DYzjYkLCKGB/"},{"desc":"Verde por fuera. Sabor por todas partes 🥑🥗 Ensaladas y bowls","tipo":"Reel de Instagram","fecha":"","alcance":2261,"likes":31,"comentarios":1,"compartidos":1,"guardados":4,"eng_rate":1.64,"url":"https://www.instagram.com/reel/DY7Gjx3sUEw/"},{"desc":"Dos personas pidieron el mismo café. Una llegó furiosa. La otra…","tipo":"Imagen de Instagram","fecha":"","alcance":335,"likes":4,"comentarios":0,"compartidos":0,"guardados":0,"eng_rate":1.19,"url":"https://www.instagram.com/p/DY_1HXtsVxt/"},{"desc":"Hay vuelos que empiezan con café. Otros con zumo frío ☀️🍊✈️","tipo":"Reel de Instagram","fecha":"","alcance":557,"likes":25,"comentarios":1,"compartidos":3,"guardados":3,"eng_rate":5.75,"url":"https://www.instagram.com/reel/DZAx3L8so7X/"},{"desc":"🔥 La cuenta atrás ha empezado — Final #GrandChefAirport","tipo":"Secuencia de Instagram","fecha":"03/04/26","alcance":1470,"likes":83,"comentarios":0,"compartidos":7,"guardados":1,"eng_rate":6.19,"url":"https://www.instagram.com/p/DVdVdajiLCg/"},{"desc":"Miguel: una década en Areas. Buenos horarios, conciliación, equipo.","tipo":"Reel de Instagram","fecha":"03/05/26","alcance":31205,"likes":360,"comentarios":8,"compartidos":12,"guardados":40,"eng_rate":1.35,"url":"https://www.instagram.com/reel/DVggll2DFdY/"}];
+
+const TC = {'Reel de Instagram':'#a78bfa','Secuencia de Instagram':'#34d399','Imagen de Instagram':'#60a5fa'};
+const TN = {'Reel de Instagram':'Reel','Secuencia de Instagram':'Carrusel','Imagen de Instagram':'Imagen'};
+const TBADGE = {'Reel de Instagram':'badge-reel','Secuencia de Instagram':'badge-carrusel','Imagen de Instagram':'badge-imagen'};
+let charts = {};
+
+function fmt(n){if(n>=1000)return(n/1000).toFixed(1)+'K';return Math.round(n).toLocaleString('es-ES');}
+
+function filtered(){
+  const t=document.getElementById('fTipo').value;
+  const m=document.getElementById('fMetric').value;
+  let d=[...RAW];
+  if(t!=='all')d=d.filter(r=>r.tipo===t);
+  d.sort((a,b)=>b[m]-a[m]);
+  return d;
+}
+
+function renderMetrics(d){
+  if(!d.length){document.getElementById('mg').innerHTML='';return;}
+  const avg=k=>d.reduce((s,r)=>s+r[k],0)/d.length;
+  const top=d[0];
+  document.getElementById('mg').innerHTML=`
+    <div class="mc"><div class="lbl">Posts</div><div class="val">${d.length}</div><div class="sub">publicaciones</div></div>
+    <div class="mc accent"><div class="lbl">Alcance medio</div><div class="val">${fmt(avg('alcance'))}</div><div class="sub">por publicación</div></div>
+    <div class="mc"><div class="lbl">Eng. rate medio</div><div class="val">${avg('eng_rate').toFixed(2)}%</div><div class="sub">likes+cm+sh+sv / alcance</div></div>
+    <div class="mc"><div class="lbl">Likes medios</div><div class="val">${fmt(avg('likes'))}</div><div class="sub">por post</div></div>
+    <div class="mc"><div class="lbl">Top alcance</div><div class="val">${fmt(top.alcance)}</div><div class="sub">${top.fecha||'—'}</div></div>
+  `;
+}
+
+function renderTable(d){
+  const body=document.getElementById('tbody');
+  if(!d.length){body.innerHTML='<tr><td colspan="9" style="text-align:center;color:var(--text3);padding:2rem">Sin datos</td></tr>';return;}
+  const maxA=d[0].alcance;
+  body.innerHTML=d.slice(0,30).map((r,i)=>{
+    const star=i<3?`<span class="star">★ #${i+1}</span>`:'';
+    return`<tr>
+      <td class="desc" title="${r.desc}">${r.desc.slice(0,55)}${r.desc.length>55?'…':''}</td>
+      <td><span class="badge ${TBADGE[r.tipo]}">${TN[r.tipo]}</span></td>
+      <td style="font-family:'DM Mono',monospace;font-size:11px">${r.fecha||'—'}</td>
+      <td>${fmt(r.alcance)} <span class="bar-bg"><span class="bar-fill" style="width:${Math.round(r.alcance/maxA*100)}%;background:${TC[r.tipo]}"></span></span></td>
+      <td>${fmt(r.likes)}</td>
+      <td>${fmt(r.guardados)}</td>
+      <td style="font-weight:500;color:${r.eng_rate>4?'var(--green)':r.eng_rate>2?'var(--text)':'var(--text3)'}">${r.eng_rate.toFixed(2)}%</td>
+      <td>${star}</td>
+      <td><a class="ig-link" href="${r.url}" target="_blank">↗</a></td>
+    </tr>`;
+  }).join('');
+}
+
+function destroyChart(id){if(charts[id]){charts[id].destroy();delete charts[id];}}
+
+function renderCharts(d){
+  if(!d.length)return;
+  const types=['Reel de Instagram','Secuencia de Instagram','Imagen de Instagram'];
+  const gridColor='rgba(255,255,255,0.05)';
+  const tickColor='#5a5a66';
+  const baseOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tickColor,callback:v=>fmt(v)},grid:{color:gridColor},border:{color:'transparent'}},x:{ticks:{color:tickColor},grid:{display:false},border:{color:'transparent'}}}};
+
+  destroyChart('c1');
+  const avgA=types.map(t=>{const g=d.filter(r=>r.tipo===t);return g.length?Math.round(g.reduce((s,r)=>s+r.alcance,0)/g.length):0;});
+  document.getElementById('leg1').innerHTML=types.map((t,i)=>`<span><span class="ldot" style="background:${TC[t]}"></span>${TN[t]} — ${fmt(avgA[i])}</span>`).join('');
+  charts['c1']=new Chart(document.getElementById('c1'),{type:'bar',data:{labels:types.map(t=>TN[t]),datasets:[{data:avgA,backgroundColor:types.map(t=>TC[t]+'33'),borderColor:types.map(t=>TC[t]),borderWidth:1.5,borderRadius:6}]},options:{...baseOpts}});
+
+  destroyChart('c2');
+  const avgE=types.map(t=>{const g=d.filter(r=>r.tipo===t);return g.length?parseFloat((g.reduce((s,r)=>s+r.eng_rate,0)/g.length).toFixed(2)):0;});
+  document.getElementById('leg2').innerHTML=types.map((t,i)=>`<span><span class="ldot" style="background:${TC[t]}"></span>${TN[t]} — ${avgE[i]}%</span>`).join('');
+  const opts2=JSON.parse(JSON.stringify(baseOpts));
+  opts2.scales.y.ticks.callback=v=>v+'%';
+  charts['c2']=new Chart(document.getElementById('c2'),{type:'bar',data:{labels:types.map(t=>TN[t]),datasets:[{data:avgE,backgroundColor:types.map(t=>TC[t]+'33'),borderColor:types.map(t=>TC[t]),borderWidth:1.5,borderRadius:6}]},options:{...opts2}});
+
+  destroyChart('c3');
+  const top10=[...d].sort((a,b)=>b.alcance-a.alcance).slice(0,10);
+  charts['c3']=new Chart(document.getElementById('c3'),{type:'bar',data:{labels:top10.map(r=>r.desc.slice(0,40)+'…'),datasets:[{data:top10.map(r=>r.alcance),backgroundColor:top10.map(r=>TC[r.tipo]+'33'),borderColor:top10.map(r=>TC[r.tipo]),borderWidth:1.5,borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tickColor,callback:v=>fmt(v)},grid:{color:gridColor},border:{color:'transparent'}},y:{ticks:{color:tickColor,font:{size:11}},grid:{display:false},border:{color:'transparent'}}}}});
+}
+
+function renderInsights(d){
+  if(!d.length)return;
+  const types=['Reel de Instagram','Secuencia de Instagram','Imagen de Instagram'];
+  const stats=types.map(t=>{
+    const g=d.filter(r=>r.tipo===t);
+    if(!g.length)return null;
+    return{tipo:t,n:g.length,avgA:g.reduce((s,r)=>s+r.alcance,0)/g.length,avgE:g.reduce((s,r)=>s+r.eng_rate,0)/g.length,avgG:g.reduce((s,r)=>s+r.guardados,0)/g.length};
+  }).filter(Boolean);
+
+  const bestA=[...stats].sort((a,b)=>b.avgA-a.avgA)[0];
+  const bestE=[...stats].sort((a,b)=>b.avgE-a.avgE)[0];
+  const top3A=[...d].sort((a,b)=>b.alcance-a.alcance).slice(0,3);
+  const top3E=[...d].sort((a,b)=>b.eng_rate-a.eng_rate).slice(0,3);
+
+  document.getElementById('insights-content').innerHTML=`
+    <div class="insight-card">
+      <h3>Top 3 por alcance</h3>
+      ${top3A.map((r,i)=>`<div class="insight-item">
+        <span class="rank">#${i+1}</span>
+        <a href="${r.url}" target="_blank" style="color:var(--text);text-decoration:none">
+          <div class="title">${r.desc.slice(0,65)}…</div>
+          <div class="meta"><span class="badge ${TBADGE[r.tipo]}" style="margin-right:6px">${TN[r.tipo]}</span> ${r.fecha||'—'} · <span class="metric">${fmt(r.alcance)} alcance</span></div>
+        </a>
+      </div>`).join('')}
+    </div>
+    <div class="insight-card">
+      <h3>Top 3 por engagement rate</h3>
+      ${top3E.map((r,i)=>`<div class="insight-item">
+        <span class="rank">#${i+1}</span>
+        <a href="${r.url}" target="_blank" style="color:var(--text);text-decoration:none">
+          <div class="title">${r.desc.slice(0,65)}…</div>
+          <div class="meta"><span class="badge ${TBADGE[r.tipo]}" style="margin-right:6px">${TN[r.tipo]}</span> <span class="metric">${r.eng_rate.toFixed(2)}%</span> eng. rate</div>
+        </a>
+      </div>`).join('')}
+    </div>
+    <div class="insight-card full">
+      <h3>Rendimiento por formato</h3>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px">
+        ${stats.map(s=>`<div style="background:var(--bg3);border-radius:8px;padding:14px 16px">
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:10px">
+            <span style="width:8px;height:8px;border-radius:50%;background:${TC[s.tipo]};flex-shrink:0"></span>
+            <span style="font-size:12px;font-weight:500;color:var(--text)">${TN[s.tipo]}</span>
+            <span style="font-size:11px;color:var(--text3)">${s.n} posts</span>
+          </div>
+          <div style="font-size:20px;font-weight:600;color:${TC[s.tipo]};letter-spacing:-0.02em">${fmt(s.avgA)}</div>
+          <div style="font-size:11px;color:var(--text3);margin:2px 0 8px">alcance medio</div>
+          <div style="font-size:14px;font-weight:500;color:var(--text)">${s.avgE.toFixed(2)}%</div>
+          <div style="font-size:11px;color:var(--text3)">eng. rate medio</div>
+        </div>`).join('')}
+      </div>
+    </div>
+    <div class="rec-box full">
+      <h3>💡 Recomendaciones para junio</h3>
+      <div class="rec-row"><span class="rec-icon">🎬</span><div><strong>Reels de producto gourmet o sensorial</strong> — el jamón ibérico cortado al momento (8.5K) y la comida al momento (7.1K) son el patrón. Vídeo corto, primer plano del producto, copy evocador. Prioriza esto para alcance.</div></div>
+      <div class="rec-row"><span class="rec-icon">🧑‍🤝‍🧑</span><div><strong>Storytelling de empleados en Reel</strong> — Miguel (31K) y Jennifer (8.7K) demuestran que las historias de conciliación y trayectoria llegan. Al menos un Reel de empleado en junio.</div></div>
+      <div class="rec-row"><span class="rec-icon">📸</span><div><strong>Carruseles temáticos con gancho emocional</strong> — mejor eng. rate medio (4.2%). Sant Jordi 9.27%, #GrandChefAirport 6.8%. Para junio: verano, terrazas de aeropuerto, destinos estivales.</div></div>
+      <div class="rec-row"><span class="rec-icon">☀️</span><div><strong>Temática veraniega</strong> — el período Mar-Jun muestra que el contenido de temporada funciona (primavera, feria). Conecta la gastronomía Areas con el espíritu del verano y los viajes de vacaciones.</div></div>
+    </div>
+  `;
+}
+
+function switchTab(name,btn){
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('on'));
+  btn.classList.add('on');
+  ['top','charts','insights'].forEach(t=>{document.getElementById('tab-'+t).style.display=t===name?'':'none';});
+  if(name==='charts')renderCharts(filtered());
+  if(name==='insights')renderInsights(filtered());
+}
+
+function render(){
+  const d=filtered();
+  renderMetrics(d);
+  renderTable(d);
+  const active=document.querySelector('.nav-tab.on').textContent.trim();
+  if(active.includes('Gráficos'))renderCharts(d);
+  if(active.includes('Insights'))renderInsights(d);
+}
+
+render();
+</script>
+</body>
+</html>
